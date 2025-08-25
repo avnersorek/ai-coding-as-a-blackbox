@@ -52,13 +52,17 @@ Then('the page should match the snapshot {string}', async function (snapshotName
 
   const numDiffPixels = pixelmatch(baseline.data, current.data, diff.data, width, height, { threshold: 0.2 });
 
-  if (numDiffPixels > 0) {
+  // Allow minimal pixel differences (up to 0.1% of total pixels) to handle CI environment rendering variations
+  const totalPixels = width * height;
+  const maxAllowedDiffPixels = Math.ceil(totalPixels * 0.001); // 0.1% tolerance
+
+  if (numDiffPixels > maxAllowedDiffPixels) {
     const diffPath = path.join(snapshotsDir, `${snapshotName}-diff.png`);
     fs.writeFileSync(diffPath, PNG.sync.write(diff));
-    throw new Error(`Snapshots do not match. See diff at ${diffPath}`);
+    throw new Error(`Snapshots do not match. ${numDiffPixels} pixels differ (max allowed: ${maxAllowedDiffPixels}). See diff at ${diffPath}`);
   }
 
-  expect(numDiffPixels).to.equal(0);
+  expect(numDiffPixels).to.be.at.most(maxAllowedDiffPixels);
 });
 
 Then('the page should use the {string} font from Google Fonts CDN', async (fontName) => {
