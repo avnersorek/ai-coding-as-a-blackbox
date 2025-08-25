@@ -1,0 +1,17 @@
+{
+  "name": "acceptance-tests",
+  "version": "1.0.0",
+  "description": "Cucumber acceptance tests",
+  "main": "index.js",
+  "scripts": {
+    "test": "cucumber-js"
+  },
+  "dependencies": {
+    "@cucumber/cucumber": "^10.8.0",
+    "chai": "^5.2.1",
+    "jest-image-snapshot": "^6.5.1",
+    "pixelmatch": "^7.1.0",
+    "pngjs": "^7.0.0",
+    "puppeteer": "^22.12.1"
+  }
+}
