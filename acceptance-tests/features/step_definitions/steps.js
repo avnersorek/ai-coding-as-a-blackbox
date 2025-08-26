@@ -12,7 +12,9 @@ let page;
 let response;
 
 Before(async () => {
-  browser = await puppeteer.launch();
+  browser = await puppeteer.launch({
+    args: ['--no-sandbox', '--disable-setuid-sandbox']
+  });
   page = await browser.newPage();
   await page.setViewport({ width: 4370, height: 2406 });
 });
@@ -52,9 +54,9 @@ Then('the page should match the snapshot {string}', async function (snapshotName
 
   const numDiffPixels = pixelmatch(baseline.data, current.data, diff.data, width, height, { threshold: 0.2 });
 
-  // Allow minimal pixel differences (up to 0.1% of total pixels) to handle CI environment rendering variations
+  // Allow minimal pixel differences (up to 0.01% of total pixels) to handle CI environment rendering variations
   const totalPixels = width * height;
-  const maxAllowedDiffPixels = Math.ceil(totalPixels * 0.001); // 0.1% tolerance
+  const maxAllowedDiffPixels = Math.ceil(totalPixels * 0.0001); // 0.01% tolerance
 
   if (numDiffPixels > maxAllowedDiffPixels) {
     const diffPath = path.join(snapshotsDir, `${snapshotName}-diff.png`);

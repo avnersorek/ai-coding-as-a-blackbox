@@ -12,10 +12,13 @@ function App() {
             <input type="email" id="email" placeholder="name@example.com" />
           </div>
           <div className="form-group">
+            <label htmlFor="password">Password</label>
+            <input type="password" id="password" />
+          </div>
+          <div className="form-group">
             <button type="submit">Continue</button>
           </div>
         </form>
-        <p className="terms">By logging in, you agree to Cyera's Terms of Service</p>
       </div>
     </div>
   );
