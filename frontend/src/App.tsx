@@ -19,7 +19,6 @@ function App() {
             <button type="submit">Continue</button>
           </div>
         </form>
-        <p className="terms">By logging in, you agree to Cyera's Terms of Service</p>
       </div>
     </div>
   );
