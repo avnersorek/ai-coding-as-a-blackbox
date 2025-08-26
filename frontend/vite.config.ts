@@ -10,5 +10,5 @@ export default defineConfig({
   preview: {
     port: 8080
   },
-  base: '/ai-coding-as-a-blackbox/'
+  base: '/'
 })

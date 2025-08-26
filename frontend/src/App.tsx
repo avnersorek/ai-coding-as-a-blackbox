@@ -1,26 +1,30 @@
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import type { AuthUser } from '@ai-coding/shared-types';
+import Login from './components/Login';
+import Welcome from './components/Welcome';
 import './App.css';
 
 function App() {
+  // Get user from sessionStorage if available
+  const getCurrentUser = (): AuthUser | undefined => {
+    const userStr = sessionStorage.getItem('currentUser');
+    if (userStr) {
+      try {
+        return JSON.parse(userStr) as AuthUser;
+      } catch {
+        return undefined;
+      }
+    }
+    return undefined;
+  };
+
   return (
-    <div className="container">
-      <div className="logo"></div>
-      <div className="login-form">
-        <h2>Sign-in</h2>
-        <form>
-          <div className="form-group">
-            <label htmlFor="email">Email</label>
-            <input type="email" id="email" placeholder="name@example.com" />
-          </div>
-          <div className="form-group">
-            <label htmlFor="password">Password</label>
-            <input type="password" id="password" />
-          </div>
-          <div className="form-group">
-            <button type="submit">Continue</button>
-          </div>
-        </form>
-      </div>
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Login />} />
+        <Route path="/welcome" element={<Welcome user={getCurrentUser()} />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
 
