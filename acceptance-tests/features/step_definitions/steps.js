@@ -92,3 +92,92 @@ Then('the page title should equal {string}', async (expectedTitle) => {
   const actualTitle = await page.title();
   expect(actualTitle).to.equal(expectedTitle);
 });
+
+// Login flow step definitions
+When('I go to {string}', async (url) => {
+  response = await page.goto(url);
+});
+
+Then('I should see the email input field', async () => {
+  const emailField = await page.$('#email');
+  expect(emailField).to.not.be.null;
+});
+
+Then('I should see the password input field', async () => {
+  const passwordField = await page.$('#password');
+  expect(passwordField).to.not.be.null;
+});
+
+Then('I should see the continue button', async () => {
+  const continueButton = await page.$('button[type="submit"]');
+  expect(continueButton).to.not.be.null;
+});
+
+When('I enter {string} in the email field', async (email) => {
+  await page.type('#email', email);
+});
+
+When('I enter {string} in the password field', async (password) => {
+  await page.type('#password', password);
+});
+
+When('I click the continue button', async () => {
+  await page.click('button[type="submit"]');
+  await page.waitForTimeout(1000); // Wait for potential redirect or error messages
+});
+
+When('I click the continue button without filling any fields', async () => {
+  await page.click('button[type="submit"]');
+  await page.waitForTimeout(1000);
+});
+
+Then('I should be redirected to the welcome page', async () => {
+  await page.waitForSelector('.welcome-message', { timeout: 5000 });
+  const url = page.url();
+  expect(url).to.include('/welcome');
+});
+
+Then('I should see the welcome message', async () => {
+  const welcomeMessage = await page.$('.welcome-message');
+  expect(welcomeMessage).to.not.be.null;
+  
+  const messageText = await page.evaluate(element => element.textContent, welcomeMessage);
+  expect(messageText.toLowerCase()).to.include('welcome');
+});
+
+Then('I should see an error message about invalid email format', async () => {
+  const errorMessage = await page.$('.error-message, .email-error');
+  expect(errorMessage).to.not.be.null;
+  
+  const errorText = await page.evaluate(element => element.textContent, errorMessage);
+  expect(errorText.toLowerCase()).to.match(/invalid.*email|email.*format/);
+});
+
+Then('I should see an error message about invalid credentials', async () => {
+  const errorMessage = await page.$('.error-message, .credentials-error');
+  expect(errorMessage).to.not.be.null;
+  
+  const errorText = await page.evaluate(element => element.textContent, errorMessage);
+  expect(errorText.toLowerCase()).to.match(/invalid.*credentials|incorrect.*username.*password/);
+});
+
+Then('I should see validation error messages', async () => {
+  const errorMessages = await page.$$('.error-message, .validation-error');
+  expect(errorMessages.length).to.be.greaterThan(0);
+});
+
+Then('I should see an error message about required email', async () => {
+  const errorMessage = await page.$('.error-message, .email-error');
+  expect(errorMessage).to.not.be.null;
+  
+  const errorText = await page.evaluate(element => element.textContent, errorMessage);
+  expect(errorText.toLowerCase()).to.match(/email.*required|required.*email/);
+});
+
+Then('I should see an error message about required password', async () => {
+  const errorMessage = await page.$('.error-message, .password-error');
+  expect(errorMessage).to.not.be.null;
+  
+  const errorText = await page.evaluate(element => element.textContent, errorMessage);
+  expect(errorText.toLowerCase()).to.match(/password.*required|required.*password/);
+});
