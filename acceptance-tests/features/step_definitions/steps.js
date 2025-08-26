@@ -87,3 +87,8 @@ Then('the {string} and {string} should have the same width', async (selector1, s
 
   expect(width1).to.equal(width2);
 });
+
+Then('the page title should equal {string}', async (expectedTitle) => {
+  const actualTitle = await page.title();
+  expect(actualTitle).to.equal(expectedTitle);
+});
