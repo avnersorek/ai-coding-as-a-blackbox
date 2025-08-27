@@ -94,9 +94,6 @@ Then('the page title should equal {string}', async (expectedTitle) => {
 });
 
 // Login flow step definitions
-When('I go to {string}', async (url) => {
-  response = await page.goto(url);
-});
 
 Then('I should see the email input field', async () => {
   const emailField = await page.$('#email');
