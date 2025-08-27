@@ -120,12 +120,12 @@ When('I enter {string} in the password field', async (password) => {
 
 When('I click the continue button', async () => {
   await page.click('button[type="submit"]');
-  await page.waitForTimeout(1000); // Wait for potential redirect or error messages
+  await new Promise(resolve => setTimeout(resolve, 1000)); // Wait for potential redirect or error messages
 });
 
 When('I click the continue button without filling any fields', async () => {
   await page.click('button[type="submit"]');
-  await page.waitForTimeout(1000);
+  await new Promise(resolve => setTimeout(resolve, 1000));
 });
 
 Then('I should be redirected to the welcome page', async () => {
