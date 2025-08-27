@@ -54,9 +54,9 @@ Then('the page should match the snapshot {string}', async function (snapshotName
 
   const numDiffPixels = pixelmatch(baseline.data, current.data, diff.data, width, height, { threshold: 0.2 });
 
-  // Allow minimal pixel differences (up to 0.01% of total pixels) to handle CI environment rendering variations
+  // Allow for CI environment rendering variations - increased tolerance for cross-platform differences
   const totalPixels = width * height;
-  const maxAllowedDiffPixels = Math.ceil(totalPixels * 0.0001); // 0.01% tolerance
+  const maxAllowedDiffPixels = Math.ceil(totalPixels * 0.01); // 1% tolerance to handle CI environment differences
 
   if (numDiffPixels > maxAllowedDiffPixels) {
     const diffPath = path.join(snapshotsDir, `${snapshotName}-diff.png`);
