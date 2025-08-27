@@ -54,9 +54,9 @@ Then('the page should match the snapshot {string}', async function (snapshotName
 
   const numDiffPixels = pixelmatch(baseline.data, current.data, diff.data, width, height, { threshold: 0.2 });
 
-  // Allow for CI environment rendering variations - increased tolerance for cross-platform differences
+  // Allow minimal pixel differences (up to 0.01% of total pixels) to handle CI environment rendering variations
   const totalPixels = width * height;
-  const maxAllowedDiffPixels = Math.ceil(totalPixels * 0.01); // 1% tolerance to handle CI environment differences
+  const maxAllowedDiffPixels = Math.ceil(totalPixels * 0.0001); // 0.01% tolerance
 
   if (numDiffPixels > maxAllowedDiffPixels) {
     const diffPath = path.join(snapshotsDir, `${snapshotName}-diff.png`);
@@ -94,6 +94,9 @@ Then('the page title should equal {string}', async (expectedTitle) => {
 });
 
 // Login flow step definitions
+When('I go to {string}', async (url) => {
+  response = await page.goto(url);
+});
 
 Then('I should see the email input field', async () => {
   const emailField = await page.$('#email');
@@ -121,11 +124,19 @@ When('I enter {string} in the password field', async (password) => {
 When('I click the continue button', async () => {
   await page.click('button[type="submit"]');
   await new Promise(resolve => setTimeout(resolve, 1000)); // Wait for potential redirect or error messages
+  
+  // Assert that the click action was successful
+  const button = await page.$('button[type="submit"]');
+  expect(button).to.not.be.null;
 });
 
 When('I click the continue button without filling any fields', async () => {
   await page.click('button[type="submit"]');
   await new Promise(resolve => setTimeout(resolve, 1000));
+  
+  // Assert that the click action was successful
+  const button = await page.$('button[type="submit"]');
+  expect(button).to.not.be.null;
 });
 
 Then('I should be redirected to the welcome page', async () => {
