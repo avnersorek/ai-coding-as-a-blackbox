@@ -1,0 +1,71 @@
+name: PR Acceptance Tests
+
+on:
+  pull_request:
+    branches: [ main ]
+    paths-ignore:
+      - '**.md'
+      - 'docs/**'
+
+jobs:
+  acceptance-tests:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: |
+            frontend/package-lock.json
+            acceptance-tests/package-lock.json
+
+      - name: Install frontend dependencies
+        run: |
+          cd frontend
+          npm ci
+
+      - name: Build frontend
+        run: |
+          cd frontend
+          npm run build
+
+      - name: Install acceptance test dependencies
+        run: |
+          cd acceptance-tests
+          npm ci
+
+      - name: Start frontend server in background
+        run: |
+          cd frontend
+          npm run preview &
+          echo $! > server.pid
+          # Wait for server to be ready
+          sleep 10
+
+      - name: Run acceptance tests
+        run: |
+          cd acceptance-tests
+          npm test
+
+      - name: Stop frontend server
+        if: always()
+        run: |
+          if [ -f frontend/server.pid ]; then
+            kill $(cat frontend/server.pid) || true
+            rm frontend/server.pid
+          fi
+
+      - name: Upload test artifacts
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-artifacts
+          path: |
+            acceptance-tests/__image_snapshots__/
+            acceptance-tests/reports/
+          retention-days: 7

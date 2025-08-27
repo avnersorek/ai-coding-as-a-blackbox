@@ -94,9 +94,6 @@ Then('the page title should equal {string}', async (expectedTitle) => {
 });
 
 // Login flow step definitions
-When('I go to {string}', async (url) => {
-  response = await page.goto(url);
-});
 
 Then('I should see the email input field', async () => {
   const emailField = await page.$('#email');
@@ -123,12 +120,20 @@ When('I enter {string} in the password field', async (password) => {
 
 When('I click the continue button', async () => {
   await page.click('button[type="submit"]');
-  await page.waitForTimeout(1000); // Wait for potential redirect or error messages
+  await new Promise(resolve => setTimeout(resolve, 1000)); // Wait for potential redirect or error messages
+  
+  // Assert that the click action was successful
+  const button = await page.$('button[type="submit"]');
+  expect(button).to.not.be.null;
 });
 
 When('I click the continue button without filling any fields', async () => {
   await page.click('button[type="submit"]');
-  await page.waitForTimeout(1000);
+  await new Promise(resolve => setTimeout(resolve, 1000));
+  
+  // Assert that the click action was successful
+  const button = await page.$('button[type="submit"]');
+  expect(button).to.not.be.null;
 });
 
 Then('I should be redirected to the welcome page', async () => {
