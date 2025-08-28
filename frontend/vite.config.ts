@@ -4,7 +4,7 @@ import react from '@vitejs/plugin-react'
 import spaFallback from './vite-spa-fallback.js'
 
 // https://vitejs.dev/config/
-export default defineConfig({
+export default defineConfig(({ command }) => ({
   plugins: [react(), spaFallback()],
   server: {
     port: 8080
@@ -13,5 +13,5 @@ export default defineConfig({
     port: 8080,
     open: false
   },
-  base: '/ai-coding-as-a-blackbox/'
-})
+  base: command === 'build' ? '/ai-coding-as-a-blackbox/' : '/'
+}))
