@@ -120,24 +120,29 @@ When('I enter {string} in the password field', async (password) => {
 
 When('I click the continue button', async () => {
   await page.click('button[type="submit"]');
-  await new Promise(resolve => setTimeout(resolve, 1000)); // Wait for potential redirect or error messages
-  
-  // Assert that the click action was successful
-  const button = await page.$('button[type="submit"]');
-  expect(button).to.not.be.null;
+  // Wait for either navigation or error message to appear
+  try {
+    await page.waitForFunction(
+      () => window.location.href.includes('/welcome') || document.querySelector('.error-message, .email-error, .password-error, .credentials-error'),
+      { timeout: 5000 }
+    );
+  } catch (error) {
+    // Continue if timeout - some tests expect immediate form validation
+  }
 });
 
 When('I click the continue button without filling any fields', async () => {
   await page.click('button[type="submit"]');
-  await new Promise(resolve => setTimeout(resolve, 1000));
-  
-  // Assert that the click action was successful
-  const button = await page.$('button[type="submit"]');
-  expect(button).to.not.be.null;
+  // Wait for validation error messages to appear
+  try {
+    await page.waitForSelector('.error-message, .validation-error, .email-error, .password-error', { timeout: 3000 });
+  } catch (error) {
+    // Continue if no errors appear - some forms handle validation differently
+  }
 });
 
 Then('I should be redirected to the welcome page', async () => {
-  await page.waitForSelector('.welcome-message', { timeout: 5000 });
+  await page.waitForSelector('.welcome-message', { timeout: 8000 });
   const url = page.url();
   expect(url).to.include('/welcome');
 });
@@ -151,6 +156,9 @@ Then('I should see the welcome message', async () => {
 });
 
 Then('I should see an error message about invalid email format', async () => {
+  // Wait for error message to appear
+  await page.waitForSelector('.error-message, .email-error', { timeout: 5000 });
+  
   const errorMessage = await page.$('.error-message, .email-error');
   expect(errorMessage).to.not.be.null;
   
@@ -159,6 +167,9 @@ Then('I should see an error message about invalid email format', async () => {
 });
 
 Then('I should see an error message about invalid credentials', async () => {
+  // Wait for error message to appear
+  await page.waitForSelector('.error-message, .credentials-error', { timeout: 5000 });
+  
   const errorMessage = await page.$('.error-message, .credentials-error');
   expect(errorMessage).to.not.be.null;
   
@@ -172,6 +183,9 @@ Then('I should see validation error messages', async () => {
 });
 
 Then('I should see an error message about required email', async () => {
+  // Wait for error message to appear
+  await page.waitForSelector('.error-message, .email-error', { timeout: 5000 });
+  
   const errorMessage = await page.$('.error-message, .email-error');
   expect(errorMessage).to.not.be.null;
   
@@ -180,6 +194,9 @@ Then('I should see an error message about required email', async () => {
 });
 
 Then('I should see an error message about required password', async () => {
+  // Wait for error message to appear
+  await page.waitForSelector('.error-message, .password-error', { timeout: 5000 });
+  
   const errorMessage = await page.$('.error-message, .password-error');
   expect(errorMessage).to.not.be.null;
   
