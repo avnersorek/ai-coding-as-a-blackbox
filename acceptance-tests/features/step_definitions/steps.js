@@ -156,6 +156,9 @@ Then('I should see the welcome message', async () => {
 });
 
 Then('I should see an error message about invalid email format', async () => {
+  // Wait for error message to appear
+  await page.waitForSelector('.error-message, .email-error', { timeout: 5000 });
+  
   const errorMessage = await page.$('.error-message, .email-error');
   expect(errorMessage).to.not.be.null;
   
@@ -164,6 +167,9 @@ Then('I should see an error message about invalid email format', async () => {
 });
 
 Then('I should see an error message about invalid credentials', async () => {
+  // Wait for error message to appear
+  await page.waitForSelector('.error-message, .credentials-error', { timeout: 5000 });
+  
   const errorMessage = await page.$('.error-message, .credentials-error');
   expect(errorMessage).to.not.be.null;
   
@@ -177,6 +183,9 @@ Then('I should see validation error messages', async () => {
 });
 
 Then('I should see an error message about required email', async () => {
+  // Wait for error message to appear
+  await page.waitForSelector('.error-message, .email-error', { timeout: 5000 });
+  
   const errorMessage = await page.$('.error-message, .email-error');
   expect(errorMessage).to.not.be.null;
   
@@ -185,6 +194,9 @@ Then('I should see an error message about required email', async () => {
 });
 
 Then('I should see an error message about required password', async () => {
+  // Wait for error message to appear
+  await page.waitForSelector('.error-message, .password-error', { timeout: 5000 });
+  
   const errorMessage = await page.$('.error-message, .password-error');
   expect(errorMessage).to.not.be.null;
   
