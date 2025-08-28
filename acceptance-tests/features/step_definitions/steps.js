@@ -120,12 +120,25 @@ When('I enter {string} in the password field', async (password) => {
 
 When('I click the continue button', async () => {
   await page.click('button[type="submit"]');
-  await page.waitForTimeout(2000); // Wait for potential redirect or error messages
+  // Wait for either navigation or error message to appear
+  try {
+    await page.waitForFunction(
+      () => window.location.href.includes('/welcome') || document.querySelector('.error-message, .email-error, .password-error, .credentials-error'),
+      { timeout: 5000 }
+    );
+  } catch (error) {
+    // Continue if timeout - some tests expect immediate form validation
+  }
 });
 
 When('I click the continue button without filling any fields', async () => {
   await page.click('button[type="submit"]');
-  await page.waitForTimeout(2000);
+  // Wait for validation error messages to appear
+  try {
+    await page.waitForSelector('.error-message, .validation-error, .email-error, .password-error', { timeout: 3000 });
+  } catch (error) {
+    // Continue if no errors appear - some forms handle validation differently
+  }
 });
 
 Then('I should be redirected to the welcome page', async () => {
