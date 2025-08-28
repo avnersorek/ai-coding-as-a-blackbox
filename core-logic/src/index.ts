@@ -28,7 +28,7 @@ function isValidEmail(email: string): boolean {
 export class AuthService {
   async login(credentials: LoginCredentials): Promise<LoginResult> {
     // Simulate API delay
-    await new Promise(resolve => setTimeout(resolve, 500));
+    await new Promise(resolve => setTimeout(resolve, 100));
     
     // Mock authentication logic
     if (credentials.email === 'user@example.com' && credentials.password === 'password123') {
