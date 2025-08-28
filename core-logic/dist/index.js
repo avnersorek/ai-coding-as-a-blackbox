@@ -6,7 +6,7 @@ export function validateLoginCredentials(credentials) {
         errors.email = 'Email is required';
     }
     else if (!isValidEmail(credentials.email)) {
-        errors.email = 'Please enter a valid email address';
+        errors.email = 'Invalid email format';
     }
     // Password validation
     if (!credentials.password.trim()) {

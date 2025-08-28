@@ -54,6 +54,8 @@ function Login() {
       if (result.success && result.user) {
         // Store user in sessionStorage for welcome page
         sessionStorage.setItem('currentUser', JSON.stringify(result.user));
+        
+        // Navigate to welcome page
         navigate('/welcome');
       } else {
         setFormState(prev => ({
