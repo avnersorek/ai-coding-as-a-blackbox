@@ -43,7 +43,7 @@ jobs:
       - name: Build frontend
         run: |
           cd frontend
-          npm run build
+          tsc -b && npx vite build --mode github-pages
 
       - name: Setup Pages
         uses: actions/configure-pages@v4
