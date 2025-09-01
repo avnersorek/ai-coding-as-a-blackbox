@@ -10,7 +10,7 @@ on:
 jobs:
   acceptance-tests:
     runs-on: ubuntu-latest
-    
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -42,7 +42,7 @@ jobs:
       - name: Start frontend server in background
         run: |
           cd frontend
-          npm run preview &
+          npm run dev &
           echo $! > server.pid
           # Wait for server to be ready
           sleep 10
