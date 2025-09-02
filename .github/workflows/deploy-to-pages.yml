@@ -3,7 +3,7 @@ name: Deploy Frontend to GitHub Pages
 on:
   # Allow manual trigger
   workflow_dispatch:
-  
+
   # Optionally trigger on push to main branch
   # push:
   #   branches: [ main ]
@@ -49,9 +49,12 @@ jobs:
         uses: actions/configure-pages@v4
 
       - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
+        uses: actions/upload-pages-artifact@v4
         with:
-          path: frontend/dist
+          path: 'frontend/dist'
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
 
   deploy:
     environment:
