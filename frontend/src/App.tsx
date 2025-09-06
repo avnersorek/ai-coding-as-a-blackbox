@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { HashRouter, Routes, Route } from 'react-router-dom';
 import type { AuthUser } from '@ai-coding/shared-types';
 import Login from './components/Login';
 import Welcome from './components/Welcome';
@@ -19,12 +19,12 @@ function App() {
   };
 
   return (
-    <BrowserRouter>
+    <HashRouter>
       <Routes>
         <Route path="/" element={<Login />} />
         <Route path="/welcome" element={<Welcome user={getCurrentUser()} />} />
       </Routes>
-    </BrowserRouter>
+    </HashRouter>
   );
 }
 
