@@ -4,7 +4,7 @@ import react from '@vitejs/plugin-react'
 import spaFallback from './vite-spa-fallback.js'
 
 // https://vitejs.dev/config/
-export default defineConfig(({ mode }) => ({
+export default defineConfig(() => ({
   plugins: [react(), spaFallback()],
   server: {
     port: 8080
