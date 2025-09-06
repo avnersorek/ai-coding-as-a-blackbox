@@ -13,5 +13,5 @@ export default defineConfig(({ mode }) => ({
     port: 8080,
     open: false
   },
-  base: mode === 'github-pages' ? '/ai-coding-as-a-blackbox/' : '/'
+  base: '/ai-coding-as-a-blackbox/'
 }))
