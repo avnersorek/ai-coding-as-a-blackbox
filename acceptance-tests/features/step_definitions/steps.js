@@ -7,6 +7,8 @@ const { PNG } = require('pngjs');
 
 setDefaultTimeout(60 * 1000);
 
+const BASE_URL = 'http://localhost:8080/ai-coding-as-a-blackbox/';
+
 let browser;
 let page;
 let response;
@@ -25,6 +27,10 @@ After(async () => {
 
 When('I go to {string}', async (url) => {
   response = await page.goto(url);
+});
+
+When('I go to the home page', async () => {
+  response = await page.goto(BASE_URL);
 });
 
 Then('I should get a {int} status code', async (statusCode) => {
