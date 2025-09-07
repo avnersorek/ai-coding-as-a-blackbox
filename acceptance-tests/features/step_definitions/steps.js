@@ -23,10 +23,6 @@ After(async () => {
   await browser.close();
 });
 
-Given('I go to {string}', async (url) => {
-  response = await page.goto(url);
-});
-
 When('I go to {string}', async (url) => {
   response = await page.goto(url);
 });
