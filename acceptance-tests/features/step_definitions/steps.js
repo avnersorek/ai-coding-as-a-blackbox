@@ -1,4 +1,4 @@
-const { When, Then, Before, After, setDefaultTimeout } = require('@cucumber/cucumber');
+const { Given, When, Then, Before, After, setDefaultTimeout } = require('@cucumber/cucumber');
 const puppeteer = require('puppeteer');
 const { expect } = require('chai');
 const fs = require('fs');
@@ -6,6 +6,8 @@ const path = require('path');
 const { PNG } = require('pngjs');
 
 setDefaultTimeout(60 * 1000);
+
+const BASE_URL = 'http://localhost:8080/ai-coding-as-a-blackbox/';
 
 let browser;
 let page;
@@ -16,7 +18,7 @@ Before(async () => {
     args: ['--no-sandbox', '--disable-setuid-sandbox']
   });
   page = await browser.newPage();
-  await page.setViewport({ width: 4370, height: 2406 });
+  await page.setViewport({ width: 1440, height: 900 });
 });
 
 After(async () => {
@@ -25,6 +27,10 @@ After(async () => {
 
 When('I go to {string}', async (url) => {
   response = await page.goto(url);
+});
+
+When('I go to the home page', async () => {
+  response = await page.goto(BASE_URL);
 });
 
 Then('I should get a {int} status code', async (statusCode) => {
@@ -52,7 +58,7 @@ Then('the page should match the snapshot {string}', async function (snapshotName
   const { width, height } = baseline;
   const diff = new PNG({ width, height });
 
-  const numDiffPixels = pixelmatch(baseline.data, current.data, diff.data, width, height, { threshold: 0.2 });
+  const numDiffPixels = pixelmatch(baseline.data, current.data, diff.data, width, height, { threshold: 0.1 });
 
   // Allow minimal pixel differences (up to 0.01% of total pixels) to handle CI environment rendering variations
   const totalPixels = width * height;

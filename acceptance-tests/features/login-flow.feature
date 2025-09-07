@@ -1,7 +1,7 @@
 Feature: Login Flow
 
   Background:
-    Given I go to "http://localhost:8080"
+    When I go to the home page
 
   Scenario: Login form elements are present
     Then I should see the email input field
