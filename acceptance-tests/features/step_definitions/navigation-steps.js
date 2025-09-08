@@ -37,7 +37,7 @@ Then('the navigation menu should be responsive', async () => {
   expect(isResponsive).to.be.true;
   
   // Restore viewport
-  await global.page.setViewport({ width: 4370, height: 2406 });
+  await global.page.setViewport({ width: 1440, height: 900 });
 });
 
 Then('the navigation menu should be accessible', async () => {

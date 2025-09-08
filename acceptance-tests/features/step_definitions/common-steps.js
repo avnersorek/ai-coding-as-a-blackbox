@@ -17,7 +17,7 @@ Before(async () => {
     args: ['--no-sandbox', '--disable-setuid-sandbox']
   });
   global.page = await global.browser.newPage();
-  await global.page.setViewport({ width: 4370, height: 2406 });
+  await global.page.setViewport({ width: 1440, height: 900 });
 });
 
 After(async () => {
@@ -53,7 +53,7 @@ Then('the page should match the snapshot {string}', async function (snapshotName
   const { width, height } = baseline;
   const diff = new PNG({ width, height });
 
-  const numDiffPixels = pixelmatch(baseline.data, current.data, diff.data, width, height, { threshold: 0.2 });
+  const numDiffPixels = pixelmatch(baseline.data, current.data, diff.data, width, height, { threshold: 0.1 });
 
   // Allow minimal pixel differences (up to 0.01% of total pixels) to handle CI environment rendering variations
   const totalPixels = width * height;
