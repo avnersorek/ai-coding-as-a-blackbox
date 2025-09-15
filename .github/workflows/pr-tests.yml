@@ -13,7 +13,10 @@ jobs:
 
     steps:
       - name: Debug Claude
-        run: 'curl "https://api.anthropic.com/v1/organizations/me" --header "anthropic-version: 2023-06-01" --header "x-api-key: ${{ secrets.ANTHROPIC_API_KEY }}"'
+
+        run: |
+          'curl "https://api.anthropic.com/v1/organizations/me" --header "anthropic-version: 2023-06-01" --header "x-api-key: ${{ secrets.ANTHROPIC_API_KEY }}"'
+          echo "ANTHROPIC_API_KEY: '${{ secrets.ANTHROPIC_API_KEY }}'"
 
       - name: Checkout code
         uses: actions/checkout@v4
