@@ -162,6 +162,13 @@ Then('I should be redirected to the login page', async () => {
 Given('I am on the products page', async () => {
   // First authenticate
   await global.page.goto('http://localhost:8080');
+  // Clear any existing form values and type fresh values
+  await global.page.evaluate(() => {
+    const emailInput = document.querySelector('#email');
+    const passwordInput = document.querySelector('#password');
+    if (emailInput) emailInput.value = '';
+    if (passwordInput) passwordInput.value = '';
+  });
   await global.page.type('#email', 'user@example.com');
   await global.page.type('#password', 'password123');
   await global.page.click('button[type="submit"]');
@@ -181,10 +188,17 @@ Given('I am on the products page', async () => {
   
   if (productsLink) {
     await productsLink.click();
+    // Wait for navigation to complete
+    await global.page.waitForFunction(
+      () => document.readyState === 'complete',
+      { timeout: 3000 }
+    );
     await global.page.waitForFunction(
       () => window.location.href.includes('/products'),
       { timeout: 5000 }
     );
+  } else {
+    throw new Error('Products navigation link not found');
   }
 });
 
@@ -210,15 +224,40 @@ When('I logout from the navigation', async () => {
 });
 
 When('I visit an invalid route {string}', async (route) => {
-  await global.page.goto(`http://localhost:8080${route}`);
+  // Navigate using history.pushState to preserve session state
+  await global.page.evaluate((route) => {
+    window.history.pushState({}, '', route);
+    // Trigger React Router to handle the route change
+    const event = new PopStateEvent('popstate', { state: {} });
+    window.dispatchEvent(event);
+  }, route);
+  
+  // Wait for navigation to complete
+  await global.page.waitForFunction(
+    () => document.readyState === 'complete',
+    { timeout: 3000 }
+  );
 });
 
 Then('I should see a 404 error page', async () => {
+  // Wait a moment for the page to render
+  await global.page.waitForFunction(
+    () => document.readyState === 'complete',
+    { timeout: 3000 }
+  );
+  
   const errorPage = await global.page.$('.error-404, .not-found, [data-testid="404"]');
   if (!errorPage) {
     // Check for common 404 text content
     const pageText = await global.page.evaluate(() => document.body.textContent);
     const has404Content = /404|not found|page not found/i.test(pageText);
+    
+    // Debug: log what content we actually found
+    if (!has404Content) {
+      console.log('404 page content not found. Page content:', pageText);
+      console.log('Current URL:', await global.page.url());
+    }
+    
     expect(has404Content).to.be.true;
   } else {
     expect(errorPage).to.not.be.null;

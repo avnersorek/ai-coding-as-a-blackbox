@@ -18,6 +18,12 @@ Before(async () => {
   });
   global.page = await global.browser.newPage();
   await global.page.setViewport({ width: 1440, height: 900 });
+  
+  // Clear any existing session storage to ensure clean state
+  await global.page.evaluateOnNewDocument(() => {
+    sessionStorage.clear();
+    localStorage.clear();
+  });
 });
 
 After(async () => {
@@ -26,6 +32,10 @@ After(async () => {
 
 When('I go to {string}', async (url) => {
   global.response = await global.page.goto(url);
+});
+
+When('I go to the home page', async () => {
+  global.response = await global.page.goto('http://localhost:8080');
 });
 
 Then('I should get a {int} status code', async (statusCode) => {
