@@ -35,7 +35,7 @@ When('I go to {string}', async (url) => {
 });
 
 When('I go to the home page', async () => {
-  global.response = await global.page.goto('http://localhost:8080');
+  global.response = await global.page.goto('http://localhost:8080/ai-coding-as-a-blackbox/');
 });
 
 Then('I should get a {int} status code', async (statusCode) => {

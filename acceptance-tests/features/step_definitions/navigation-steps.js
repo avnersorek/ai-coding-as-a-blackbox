@@ -79,7 +79,7 @@ When('I click on the {string} navigation link', async (linkText) => {
 
 Then('I should be on the products page', async () => {
   await global.page.waitForFunction(
-    () => window.location.href.includes('/products'),
+    () => window.location.href.includes('/products') || window.location.pathname.endsWith('/products'),
     { timeout: 5000 }
   );
   
@@ -89,7 +89,7 @@ Then('I should be on the products page', async () => {
 
 Then('I should be on the welcome page', async () => {
   await global.page.waitForFunction(
-    () => window.location.href.includes('/welcome'),
+    () => window.location.href.includes('/welcome') || window.location.pathname.endsWith('/welcome'),
     { timeout: 5000 }
   );
   
@@ -145,23 +145,23 @@ When('I navigate forward using the browser forward button', async () => {
 });
 
 When('I visit the products page directly', async () => {
-  await global.page.goto('http://localhost:8080/products');
+  await global.page.goto('http://localhost:8080/ai-coding-as-a-blackbox/products');
 });
 
 Then('I should be redirected to the login page', async () => {
   await global.page.waitForFunction(
-    () => window.location.href.includes('/login') || window.location.pathname === '/',
+    () => window.location.href.includes('/login') || window.location.pathname === '/' || window.location.pathname === '/ai-coding-as-a-blackbox/' || window.location.pathname === '/ai-coding-as-a-blackbox',
     { timeout: 5000 }
   );
   
   const url = global.page.url();
-  const isOnLoginPage = url.includes('/login') || url.endsWith('/');
+  const isOnLoginPage = url.includes('/login') || url.endsWith('/ai-coding-as-a-blackbox/') || url.endsWith('/ai-coding-as-a-blackbox') || url.endsWith('/');
   expect(isOnLoginPage).to.be.true;
 });
 
 Given('I am on the products page', async () => {
   // First authenticate
-  await global.page.goto('http://localhost:8080');
+  await global.page.goto('http://localhost:8080/ai-coding-as-a-blackbox/');
   // Clear any existing form values and type fresh values
   await global.page.evaluate(() => {
     const emailInput = document.querySelector('#email');
@@ -194,7 +194,7 @@ Given('I am on the products page', async () => {
       { timeout: 3000 }
     );
     await global.page.waitForFunction(
-      () => window.location.href.includes('/products'),
+      () => window.location.href.includes('/products') || window.location.pathname.endsWith('/products'),
       { timeout: 5000 }
     );
   } else {
