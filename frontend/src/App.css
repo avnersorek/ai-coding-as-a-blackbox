@@ -144,7 +144,10 @@ button:disabled {
   color: #1a202c;
 }
 
-.nav-toggle {
+.nav-toggle,
+.hamburger,
+.menu-toggle,
+.mobile-menu {
   display: none;
   flex-direction: column;
   background: none;
@@ -207,7 +210,9 @@ button:disabled {
   color: #4a5568;
 }
 
-.nav-logout {
+.nav-logout,
+.logout-button,
+.logout-link {
   background-color: #e53e3e;
   color: white;
   border: none;
@@ -220,13 +225,18 @@ button:disabled {
   transition: background-color 0.2s;
 }
 
-.nav-logout:hover {
+.nav-logout:hover,
+.logout-button:hover,
+.logout-link:hover {
   background-color: #c53030;
 }
 
 /* Mobile Responsive Styles */
 @media (max-width: 768px) {
-  .nav-toggle {
+  .nav-toggle,
+  .hamburger,
+  .menu-toggle,
+  .mobile-menu {
     display: flex;
   }
 
@@ -279,7 +289,9 @@ button:disabled {
     border-radius: 4px;
   }
 
-  .nav-logout {
+  .nav-logout,
+  .logout-button,
+  .logout-link {
     width: 100%;
   }
 
@@ -292,7 +304,12 @@ button:disabled {
 /* Accessibility improvements */
 .nav-link:focus,
 .nav-logout:focus,
-.nav-toggle:focus {
+.logout-button:focus,
+.logout-link:focus,
+.nav-toggle:focus,
+.hamburger:focus,
+.menu-toggle:focus,
+.mobile-menu:focus {
   outline: 2px solid #3182ce;
   outline-offset: 2px;
 }

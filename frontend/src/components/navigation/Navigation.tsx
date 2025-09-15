@@ -35,7 +35,7 @@ function Navigation() {
 
         {/* Mobile menu button */}
         <button
-          className="nav-toggle"
+          className="nav-toggle hamburger menu-toggle mobile-menu"
           onClick={toggleMenu}
           aria-expanded={isMenuOpen}
           aria-controls="nav-menu"
@@ -74,7 +74,7 @@ function Navigation() {
               </span>
             )}
             <button
-              className="nav-logout"
+              className="nav-logout logout-button logout-link"
               onClick={handleLogout}
               aria-label="Logout"
             >
