@@ -51,7 +51,7 @@ function AppContent() {
 
 function App() {
   return (
-    <BrowserRouter>
+    <BrowserRouter basename="/ai-coding-as-a-blackbox">
       <AuthProvider>
         <AppContent />
       </AuthProvider>
