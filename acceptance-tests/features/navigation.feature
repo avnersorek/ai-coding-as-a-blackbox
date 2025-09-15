@@ -1,7 +1,7 @@
 Feature: Navigation
 
   Background:
-    Given I go to "http://localhost:8080"
+    Given I go to the home page
     And I enter "user@example.com" in the email field
     And I enter "password123" in the password field
     And I click the continue button
@@ -50,7 +50,7 @@ Feature: Navigation
     Then I should be redirected to the login page
 
   Scenario: Navigation appears only after successful login
-    Given I go to "http://localhost:8080"
+    Given I go to the home page
     Then I should not see the navigation menu
     When I enter "user@example.com" in the email field
     And I enter "password123" in the password field

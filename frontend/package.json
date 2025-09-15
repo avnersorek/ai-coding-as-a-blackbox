@@ -15,7 +15,8 @@
     "react-dom": "^19.1.1",
     "react-router-dom": "^6.25.0",
     "@ai-coding/shared-types": "file:../shared-types",
-    "@ai-coding/core-logic": "file:../core-logic"
+    "@ai-coding/core-logic": "file:../core-logic",
+    "shared-constants": "file:../shared-constants"
   },
   "devDependencies": {
     "@eslint/js": "^9.32.0",

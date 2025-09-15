@@ -1,0 +1,28 @@
+{
+  "name": "shared-constants",
+  "version": "1.0.0",
+  "description": "Shared constants for the AI Coding application",
+  "main": "dist/index.cjs",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "scripts": {
+    "build": "npm run build:esm && npm run build:cjs",
+    "build:esm": "tsc --module esnext --outDir dist --declaration --declarationMap",
+    "build:cjs": "tsc --module commonjs --outDir dist_temp && mv dist_temp/index.js dist/index.cjs && rm -rf dist_temp",
+    "dev": "tsc --watch",
+    "clean": "rm -rf dist"
+  },
+  "devDependencies": {
+    "typescript": "^5.0.2"
+  },
+  "files": [
+    "dist"
+  ]
+}
