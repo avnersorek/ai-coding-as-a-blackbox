@@ -1,5 +1,6 @@
 const { When, Then, Given } = require('@cucumber/cucumber');
 const { expect } = require('chai');
+const { FRONTEND_BASE_URL, FRONTEND_BASE_ROUTE } = require('shared-constants');
 
 // Import common-steps to ensure globals are initialized
 require('./common-steps');
@@ -145,23 +146,23 @@ When('I navigate forward using the browser forward button', async () => {
 });
 
 When('I visit the products page directly', async () => {
-  await global.page.goto('http://localhost:8080/ai-coding-as-a-blackbox/products');
+  await global.page.goto(FRONTEND_BASE_URL + 'products');
 });
 
 Then('I should be redirected to the login page', async () => {
   await global.page.waitForFunction(
-    () => window.location.href.includes('/login') || window.location.pathname === '/' || window.location.pathname === '/ai-coding-as-a-blackbox/' || window.location.pathname === '/ai-coding-as-a-blackbox',
+    () => window.location.href.includes('/login') || window.location.pathname === '/' || window.location.pathname === FRONTEND_BASE_ROUTE || window.location.pathname === FRONTEND_BASE_ROUTE.replace(/\/$/, ''),
     { timeout: 5000 }
   );
   
   const url = global.page.url();
-  const isOnLoginPage = url.includes('/login') || url.endsWith('/ai-coding-as-a-blackbox/') || url.endsWith('/ai-coding-as-a-blackbox') || url.endsWith('/');
+  const isOnLoginPage = url.includes('/login') || url.endsWith(FRONTEND_BASE_ROUTE) || url.endsWith(FRONTEND_BASE_ROUTE.replace(/\/$/, '')) || url.endsWith('/');
   expect(isOnLoginPage).to.be.true;
 });
 
 Given('I am on the products page', async () => {
   // First authenticate
-  await global.page.goto('http://localhost:8080/ai-coding-as-a-blackbox/');
+  await global.page.goto(FRONTEND_BASE_URL);
   // Clear any existing form values and type fresh values
   await global.page.evaluate(() => {
     const emailInput = document.querySelector('#email');

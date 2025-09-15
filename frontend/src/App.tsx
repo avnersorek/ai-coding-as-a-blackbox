@@ -1,4 +1,5 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { FRONTEND_BASE_ROUTE } from 'shared-constants';
 import { AuthProvider, useAuth } from './components/navigation/AuthContext';
 import Navigation from './components/navigation/Navigation';
 import ProtectedRoute from './components/navigation/ProtectedRoute';
@@ -51,7 +52,7 @@ function AppContent() {
 
 function App() {
   return (
-    <BrowserRouter basename="/ai-coding-as-a-blackbox">
+    <BrowserRouter basename={FRONTEND_BASE_ROUTE.replace(/\/$/, '')}>
       <AuthProvider>
         <AppContent />
       </AuthProvider>

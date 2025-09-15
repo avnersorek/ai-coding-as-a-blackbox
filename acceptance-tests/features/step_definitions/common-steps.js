@@ -4,6 +4,7 @@ const { expect } = require('chai');
 const fs = require('fs');
 const path = require('path');
 const { PNG } = require('pngjs');
+const { FRONTEND_BASE_URL } = require('shared-constants');
 
 setDefaultTimeout(60 * 1000);
 
@@ -35,7 +36,7 @@ When('I go to {string}', async (url) => {
 });
 
 When('I go to the home page', async () => {
-  global.response = await global.page.goto('http://localhost:8080/ai-coding-as-a-blackbox/');
+  global.response = await global.page.goto(FRONTEND_BASE_URL);
 });
 
 Then('I should get a {int} status code', async (statusCode) => {

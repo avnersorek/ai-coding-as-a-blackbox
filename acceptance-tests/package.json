@@ -12,6 +12,7 @@
     "jest-image-snapshot": "^6.5.1",
     "pixelmatch": "^7.1.0",
     "pngjs": "^7.0.0",
-    "puppeteer": "^22.12.1"
+    "puppeteer": "^22.12.1",
+    "shared-constants": "file:../shared-constants"
   }
 }
