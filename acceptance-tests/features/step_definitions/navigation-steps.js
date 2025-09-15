@@ -17,8 +17,10 @@ Then('I should not see the navigation menu', async () => {
 });
 
 Then('the navigation menu should contain the {string} link', async (linkText) => {
-  const navLink = await global.page.$x(`//nav//a[contains(text(), "${linkText}")]`);
-  expect(navLink.length).to.be.greaterThan(0);
+  const navLink = await global.page.$$(`nav a`);
+  const linkTexts = await Promise.all(navLink.map(link => global.page.evaluate(el => el.textContent, link)));
+  const hasLink = linkTexts.some(text => text.includes(linkText));
+  expect(hasLink).to.be.true;
 });
 
 Then('the navigation menu should be responsive', async () => {
@@ -54,10 +56,19 @@ Then('the navigation menu should be accessible', async () => {
 });
 
 When('I click on the {string} navigation link', async (linkText) => {
-  const navLink = await global.page.$x(`//nav//a[contains(text(), "${linkText}")]`);
-  expect(navLink.length).to.be.greaterThan(0);
+  const navLinks = await global.page.$$('nav a');
+  let targetLink = null;
   
-  await navLink[0].click();
+  for (const link of navLinks) {
+    const text = await global.page.evaluate(el => el.textContent, link);
+    if (text.includes(linkText)) {
+      targetLink = link;
+      break;
+    }
+  }
+  
+  expect(targetLink).to.not.be.null;
+  await targetLink.click();
   
   // Wait for navigation to complete
   await global.page.waitForFunction(
@@ -87,8 +98,23 @@ Then('I should be on the welcome page', async () => {
 });
 
 Then('the {string} navigation item should be active', async (linkText) => {
-  const activeNavLink = await global.page.$x(`//nav//a[contains(text(), "${linkText}") and (contains(@class, "active") or contains(@class, "current") or @aria-current)]`);
-  expect(activeNavLink.length).to.be.greaterThan(0);
+  const navLinks = await global.page.$$('nav a');
+  let foundActiveLink = false;
+  
+  for (const link of navLinks) {
+    const text = await global.page.evaluate(el => el.textContent, link);
+    if (text.includes(linkText)) {
+      const className = await global.page.evaluate(el => el.className, link);
+      const ariaCurrent = await global.page.evaluate(el => el.getAttribute('aria-current'), link);
+      
+      if (className.includes('active') || className.includes('current') || ariaCurrent) {
+        foundActiveLink = true;
+        break;
+      }
+    }
+  }
+  
+  expect(foundActiveLink).to.be.true;
 });
 
 Then('the page title should be {string}', async (expectedTitle) => {
@@ -142,9 +168,19 @@ Given('I am on the products page', async () => {
   await global.page.waitForSelector('.welcome-message', { timeout: 8000 });
   
   // Then navigate to products page
-  const navLink = await global.page.$x(`//nav//a[contains(text(), "Products")]`);
-  if (navLink.length > 0) {
-    await navLink[0].click();
+  const navLinks = await global.page.$$('nav a');
+  let productsLink = null;
+  
+  for (const link of navLinks) {
+    const text = await global.page.evaluate(el => el.textContent, link);
+    if (text.includes('Products')) {
+      productsLink = link;
+      break;
+    }
+  }
+  
+  if (productsLink) {
+    await productsLink.click();
     await global.page.waitForFunction(
       () => window.location.href.includes('/products'),
       { timeout: 5000 }
