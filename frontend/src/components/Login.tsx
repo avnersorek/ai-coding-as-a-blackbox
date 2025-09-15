@@ -1,10 +1,13 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import type { LoginFormState, LoginCredentials } from '@ai-coding/shared-types';
 import { validateLoginCredentials, AuthService } from '@ai-coding/core-logic';
+import { useAuth } from './navigation/AuthContext';
 
 function Login() {
   const navigate = useNavigate();
+  const location = useLocation();
+  const { login } = useAuth();
   const authService = new AuthService();
   
   const [formState, setFormState] = useState<LoginFormState>({
@@ -52,11 +55,12 @@ function Login() {
       const result = await authService.login(formState.credentials);
       
       if (result.success && result.user) {
-        // Store user in sessionStorage for welcome page
-        sessionStorage.setItem('currentUser', JSON.stringify(result.user));
+        // Update auth context
+        login(result.user);
         
-        // Navigate to welcome page
-        navigate('/welcome');
+        // Navigate to intended destination or welcome page
+        const from = (location.state as any)?.from?.pathname || '/welcome';
+        navigate(from, { replace: true });
       } else {
         setFormState(prev => ({
           ...prev,

@@ -1,29 +1,60 @@
 import { HashRouter, Routes, Route } from 'react-router-dom';
-import type { AuthUser } from '@ai-coding/shared-types';
+import { AuthProvider, useAuth } from './components/navigation/AuthContext';
+import Navigation from './components/navigation/Navigation';
+import ProtectedRoute from './components/navigation/ProtectedRoute';
 import Login from './components/Login';
 import Welcome from './components/Welcome';
+import Products from './pages/Products';
+import NotFound from './pages/NotFound';
 import './App.css';
 
-function App() {
-  // Get user from sessionStorage if available
-  const getCurrentUser = (): AuthUser | undefined => {
-    const userStr = sessionStorage.getItem('currentUser');
-    if (userStr) {
-      try {
-        return JSON.parse(userStr) as AuthUser;
-      } catch {
-        return undefined;
-      }
-    }
-    return undefined;
-  };
+function AppContent() {
+  const { isAuthenticated } = useAuth();
 
   return (
-    <HashRouter>
+    <>
+      {isAuthenticated && <Navigation />}
       <Routes>
         <Route path="/" element={<Login />} />
-        <Route path="/welcome" element={<Welcome user={getCurrentUser()} />} />
+        <Route
+          path="/welcome"
+          element={
+            <ProtectedRoute>
+              <Welcome />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/products"
+          element={
+            <ProtectedRoute>
+              <Products />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="*"
+          element={
+            isAuthenticated ? (
+              <>
+                <NotFound />
+              </>
+            ) : (
+              <Login />
+            )
+          }
+        />
       </Routes>
+    </>
+  );
+}
+
+function App() {
+  return (
+    <HashRouter>
+      <AuthProvider>
+        <AppContent />
+      </AuthProvider>
     </HashRouter>
   );
 }
